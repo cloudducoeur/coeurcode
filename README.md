@@ -36,4 +36,5 @@ docker run -p 3000:3000 coeurcode
 
 ## Licence
 
-Projet sous licence GPLv3. Développé par Cloud du Cœur.
+Projet sous licence GPLv3. 
+Développé par l'équipe du Cloud du Cœur.
