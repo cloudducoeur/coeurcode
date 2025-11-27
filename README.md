@@ -1,4 +1,4 @@
-# CoeurCode
+![](img/logo.png)
 
 CoeurCode est une application Next.js permettant de générer des QR codes personnalisés avec des presets pour les Restos du Cœur, Radio Restos, Les Enfoirés, et plus encore.
 
