@@ -11,19 +11,21 @@ CoeurCode est une application Next.js permettant de générer des QR codes perso
 - Sélection de la taille
 - Mode sombre
 
-## Installation
+## Utilisation
+
+### Installation
 
 ```bash
 npm install
 ```
 
-## Lancement en développement
+### Lancement en développement
 
 ```bash
 npm run dev
 ```
 
-## Lancement en production (Docker)
+### Lancement en production (Docker)
 
 ```bash
 docker build -t coeurcode .
