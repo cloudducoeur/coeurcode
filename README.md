@@ -34,7 +34,43 @@ docker build -t coeurcode .
 docker run -p 3000:3000 coeurcode
 ```
 
+## Aller plus loin
+
+### Ajouter un nouveau preset personnalisé
+
+Pour ajouter un nouveau preset de QR code :
+
+1. Ouvrez le fichier `src/types/preset.ts`.
+2. Ajoutez un nouvel objet dans le tableau `presets` avec les propriétés suivantes :
+
+```typescript
+{
+  id: 'mon-id', // identifiant unique
+  name: 'Nom du preset', // affiché dans l’interface
+  color: '#HEX', // couleur principale du QR code
+  backgroundColor: '#HEX', // couleur de fond
+  logoUrl: 'https://url/logo.png', // (optionnel) URL du logo
+  logoWidth: 50, // (optionnel) largeur du logo
+  logoHeight: 50 // (optionnel) hauteur du logo
+}
+```
+
+3. Enregistrez le fichier. Le preset apparaîtra automatiquement dans l’interface.
+
+Exemple :
+```typescript
+{
+  id: 'nouveau-preset',
+  name: 'Mon Nouveau Preset',
+  color: '#FF9900',
+  backgroundColor: '#FFFFFF',
+  logoUrl: 'https://exemple.com/logo.png',
+  logoWidth: 50,
+  logoHeight: 50
+}
+```
+
 ## Licence
 
-Projet sous licence GPLv3. 
-Développé par l'équipe du Cloud du Cœur.
+Projet sous licence GPLv3.
+Développé par l'équipe du [Cloud du Cœur](https://cloudducoeur.org/).
