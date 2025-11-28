@@ -58,6 +58,7 @@ Pour ajouter un nouveau preset de QR code :
 3. Enregistrez le fichier. Le preset apparaîtra automatiquement dans l’interface.
 
 Exemple :
+
 ```typescript
 {
   id: 'nouveau-preset',
