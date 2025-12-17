@@ -12,6 +12,9 @@ CoeurCode est une application Next.js permettant de générer des QR codes perso
 - Téléchargement et copie du QR code
 - Sélection de la taille
 - Mode sombre
+- Suivi du nombre de scans par lien
+- Statistiques visuelles
+- Export des métriques pour Prometheus
 
 ## Utilisation
 
@@ -32,6 +35,18 @@ npm run dev
 ```bash
 docker build -t coeurcode .
 docker run -p 3000:3000 coeurcode
+```
+
+## Monitoring
+
+L'application expose des métriques au format Prometheus sur l'endpoint `/metrics`.
+
+Exemple de sortie :
+
+```text
+# HELP qrcode_scans_total Total number of QR code scans
+# TYPE qrcode_scans_total counter
+qrcode_scans_total{short_code="TtdL5j",target_url="https://www.restosducoeur.org/"} 1
 ```
 
 ## Aller plus loin

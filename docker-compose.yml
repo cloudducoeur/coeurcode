@@ -1,0 +1,34 @@
+version: '3.8'
+
+# ⚠️ IMPORTANT : Les identifiants ci-dessous sont donnés à titre d'exemple.
+# Veuillez impérativement modifier les mots de passe (POSTGRES_PASSWORD) et l'URL de connexion (DATABASE_URL) pour un usage en production.
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      # Modifier le mot de passe dans l'URL ci-dessous pour correspondre à celui de la DB
+      - DATABASE_URL=postgresql://postgres:password@db:5432/coeurcode?schema=public
+    depends_on:
+      - db
+    # Utilise db push pour synchroniser le schéma (utile pour le premier lancement sans migrations)
+    # En production, préférez 'npx prisma migrate deploy' avec des migrations générées
+    command: sh -c "npx prisma db push && npm start"
+
+  db:
+    image: postgres:18-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      # Modifier le mot de passe ci-dessous
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=coeurcode
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+
+volumes:
+  postgres_data:

@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model QRCode {
+  id        String   @id @default(cuid())
+  shortCode String   @unique
+  targetUrl String
+  scans     Int      @default(0)
+  createdAt DateTime @default(now())
+  scanEvents Scan[]
+}
+
+model Scan {
+  id        String   @id @default(cuid())
+  qrCodeId  String
+  qrCode    QRCode   @relation(fields: [qrCodeId], references: [id])
+  scannedAt DateTime @default(now())
+}

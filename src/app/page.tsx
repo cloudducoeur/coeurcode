@@ -12,6 +12,10 @@ export default function Home() {
   const [customLogo, setCustomLogo] = useState<string>("");
   const [dark, setDark] = useState(false);
   const [qrSize, setQrSize] = useState<number>(280);
+  const [enableTracking, setEnableTracking] = useState(false);
+  const [trackingUrl, setTrackingUrl] = useState<string>("");
+  const [shortCode, setShortCode] = useState<string>("");
+  const [scanCount, setScanCount] = useState<number | null>(null);
   // Notification de confidentialité supprimée
 
   useEffect(() => {
@@ -86,21 +90,105 @@ export default function Home() {
             {/* Input Section */}
             <div className={dark ? "bg-zinc-900 rounded-xl shadow-sm border border-zinc-800 p-6" : "bg-white rounded-xl shadow-sm border border-gray-200 p-6"}>
               <h2 className={"text-lg font-semibold mb-4 " + (dark ? "text-zinc-100" : "text-gray-900")}>Contenu du QR Code</h2>
-              <div>
-                <label
-                  htmlFor="qr-content"
-                  className={"block text-sm font-medium mb-2 " + (dark ? "text-zinc-300" : "text-gray-700")}
-                >
-                  URL ou texte
-                </label>
-                <input
-                  id="qr-content"
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="https://example.com"
-                  className={"w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all " + (dark ? "border-zinc-700 text-zinc-100 bg-zinc-800 placeholder-zinc-400" : "border-gray-300 text-gray-900 placeholder-gray-400")}
-                />
+              <div className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="qr-content"
+                    className={"block text-sm font-medium mb-2 " + (dark ? "text-zinc-300" : "text-gray-700")}
+                  >
+                    URL ou texte
+                  </label>
+                  <input
+                    id="qr-content"
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    placeholder="https://example.com"
+                    className={"w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all " + (dark ? "border-zinc-700 text-zinc-100 bg-zinc-800 placeholder-zinc-400" : "border-gray-300 text-gray-900 placeholder-gray-400")}
+                  />
+                </div>
+
+                {/* Tracking Option */}
+                <div className="flex items-center gap-3 pt-2">
+                  <input
+                    id="enable-tracking"
+                    type="checkbox"
+                    checked={enableTracking}
+                    onChange={(e) => setEnableTracking(e.target.checked)}
+                    className="w-5 h-5 rounded border-gray-300 text-pink-600 focus:ring-pink-500"
+                  />
+                  <label
+                    htmlFor="enable-tracking"
+                    className={"text-sm font-medium cursor-pointer " + (dark ? "text-zinc-300" : "text-gray-700")}
+                  >
+                    Activer le suivi des scans (génère un lien court)
+                  </label>
+                </div>
+
+                {enableTracking && (
+                  <button
+                    onClick={async () => {
+                      if (!inputValue) {
+                        alert('Veuillez entrer une URL');
+                        return;
+                      }
+                      try {
+                        const res = await fetch('/api/qrcodes', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ targetUrl: inputValue }),
+                        });
+                        const data = await res.json();
+                        if (data.fullUrl) {
+                          setTrackingUrl(data.fullUrl);
+                          setShortCode(data.shortCode);
+                          setScanCount(0);
+                        }
+                      } catch (error) {
+                        console.error('Error creating tracking URL:', error);
+                        alert('Erreur lors de la création du lien de suivi');
+                      }
+                    }}
+                    className={"w-full px-4 py-2 rounded-lg font-medium transition-colors " + (dark ? "bg-pink-600 hover:bg-pink-700 text-white" : "bg-pink-600 hover:bg-pink-700 text-white")}
+                  >
+                    Générer le lien de suivi
+                  </button>
+                )}
+
+                {trackingUrl && (
+                  <div className={"p-4 rounded-lg " + (dark ? "bg-zinc-800 border border-zinc-700" : "bg-pink-50 border border-pink-200")}>
+                    <div className="mb-4">
+                      <p className={"text-sm font-medium mb-1 " + (dark ? "text-zinc-300" : "text-gray-700")}>
+                        Lien de scan (à mettre dans le QR Code) :
+                      </p>
+                      <p className={"text-sm font-mono break-all " + (dark ? "text-pink-400" : "text-pink-600")}>
+                        {trackingUrl}
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <p className={"text-sm font-medium mb-1 " + (dark ? "text-zinc-300" : "text-gray-700")}>
+                        Lien des statistiques (à conserver) :
+                      </p>
+                      <a 
+                        href={`/stats/${shortCode}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={"text-sm font-mono break-all hover:underline " + (dark ? "text-blue-400" : "text-blue-600")}
+                      >
+                        {typeof window !== 'undefined' ? `${window.location.origin}/stats/${shortCode}` : `/stats/${shortCode}`}
+                      </a>
+                    </div>
+
+                    <a
+                      href={`/stats/${shortCode}`}
+                      target="_blank"
+                      className={"mt-4 block w-full text-center px-4 py-2 rounded-lg font-medium transition-colors " + (dark ? "bg-zinc-700 hover:bg-zinc-600 text-zinc-200" : "bg-pink-100 hover:bg-pink-200 text-pink-900")}
+                    >
+                      Voir les statistiques détaillées
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -219,7 +307,7 @@ export default function Home() {
               <h2 className={"text-lg font-semibold mb-6 text-center " + (dark ? "text-zinc-100" : "text-gray-900")}>Aperçu du QR Code</h2>
               <div className="flex justify-center">
                 <QRCodeGenerator
-                  value={inputValue}
+                  value={enableTracking && trackingUrl ? trackingUrl : inputValue}
                   preset={
                     isCustomPreset
                       ? { ...selectedPreset, color: customColor, logoUrl: customLogo || undefined }
