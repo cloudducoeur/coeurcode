@@ -159,7 +159,7 @@ export default function Home() {
                   <div className={"p-4 rounded-lg " + (dark ? "bg-zinc-800 border border-zinc-700" : "bg-pink-50 border border-pink-200")}>
                     <div className="mb-4">
                       <p className={"text-sm font-medium mb-1 " + (dark ? "text-zinc-300" : "text-gray-700")}>
-                        Lien de scan (à mettre dans le QR Code) :
+                        Lien de scan (ajouté dans le QRCode généré) :
                       </p>
                       <p className={"text-sm font-mono break-all " + (dark ? "text-pink-400" : "text-pink-600")}>
                         {trackingUrl}
