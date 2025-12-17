@@ -32,10 +32,17 @@ npm run dev
 
 ### Lancement en production (Docker)
 
+L'application fonctionne avec une base de données PostgreSQL. Il est recommandé d'utiliser Docker Compose pour lancer la stack complète.
+
+1. (Optionnel) Modifiez les identifiants de base de données dans `docker-compose.yml`.
+2. Lancez les conteneurs :
+
 ```bash
-docker build -t coeurcode .
-docker run -p 3000:3000 coeurcode
+docker-compose up -d --build
 ```
+
+L'application sera accessible sur [http://localhost:3001](http://localhost:3001).
+Les métriques sont disponibles sur [http://localhost:3001/metrics](http://localhost:3001/metrics).
 
 ## Monitoring
 
